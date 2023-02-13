@@ -1,0 +1,28 @@
+- debug:
+    var: item
+
+- name: get release name from values yaml
+  include_vars:
+    file: "{{ item }}"
+    name: valueFile
+
+- debug:
+    var: valueFile.fullnameOverride
+
+#- name: render values file
+#  ansible.builtin.template:
+#    src: values.yml.j2
+#    dest: /tmp/component-values.yml
+
+# Check values on values file
+
+- name: deploy dfcomponent
+  kubernetes.core.helm:
+    name: "{{ valueFile.fullnameOverride }}"
+    chart_ref: oci://eu.gcr.io/yildizozan/charts/dfcomponent
+    chart_version: 0.1.0
+    values_files:
+      - "{{ item }}"
+    release_namespace: default
+    create_namespace: true
+    update_repo_cache: true

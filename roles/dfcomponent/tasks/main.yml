@@ -1,0 +1,17 @@
+---
+# tasks file for dfcomponent
+# - name: Add dfcomponent chart repo
+#   kubernetes.core.helm_repository:
+#     name: dfcomponent
+#     repo_url: https://github.com/yildizozan/dfcomponent
+
+
+# LOOP 
+- name: Git checkout
+  ansible.builtin.git:
+    repo: 'https://github.com/yildizozan/dfvalues.git'
+    dest: ./values
+
+- include_tasks: deploy.yml
+  with_fileglob:
+  - "values/*"
